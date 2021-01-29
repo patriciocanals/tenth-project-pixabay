@@ -40,16 +40,19 @@ function showAlert(msg){
     }
 }
 
-function searchImages(){
+async function searchImages(){
     const keyword = document.querySelector('#keyword').value;
     const apiKey = '20051212-e88f5a0bb397049a3256842c5';
     const url = `https://pixabay.com/api/?key=${apiKey}&q=${keyword}&per_page=${resultsByPage}&page=${currentPage}`;
     
-    fetch(url).then( response => response.json() )
-              .then( result => {
-                  totalPages = calculatePages(result.totalHits);
-                  showImages(result.hits);
-            });
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
+        totalPages = calculatePages(result.totalHits);
+        showImages(result.hits);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function *createPages(total){
